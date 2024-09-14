@@ -10,7 +10,7 @@ import java.util.Properties;
 
 @Slf4j
 public class KafkaProducerMain {
-    private static final String topic = "peoples_data";
+    private static final String topic = "people_data";
     private final KafkaProducer<String, Person> producer;
     private final Person[] people;
 
@@ -41,9 +41,7 @@ public class KafkaProducerMain {
                 }
             });
         }
-        // flush data - synchronous
         this.producer.flush();
-        // flush and close producer
         this.producer.close();
     }
 
@@ -57,8 +55,7 @@ public class KafkaProducerMain {
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, MessageSerializer.class.getName());
 
         // create the producer
-        KafkaProducer<String, Person> producer = new KafkaProducer<>(properties);
-        return producer;
+        return new KafkaProducer<>(properties);
     }
 }
 

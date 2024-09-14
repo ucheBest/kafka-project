@@ -23,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
 public class KafkaConsumerMain {
-    private static final String topic = "peoples_data";
+    private static final String topic = "people_data";
     private static KafkaConsumer<String, Person> consumer;
     private static final long timeout = 3000;
 
