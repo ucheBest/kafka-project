@@ -24,6 +24,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Slf4j
 public class KafkaConsumerMain {
     private static final String topic = "people_data";
+    private static final String bootstrapServers = "localhost:9092";
+    private static final String groupId = "consumer-4";
     private static KafkaConsumer<String, Person> consumer;
     private static final long timeout = 3000;
 
@@ -52,17 +54,15 @@ public class KafkaConsumerMain {
 
                 long elapsed = System.currentTimeMillis() - startTime;
                 if (elapsed > timeout) {
-                    ArrayList<Person> people = new ArrayList<>(results);
                     terminateRequest = true;
-                    promise.complete(people);
+                    promise.complete(new ArrayList<>(results));
                     break;
                 }
 
                 for (ConsumerRecord<String, Person> record : records) {
                     if (results.size() == num) {
-                        ArrayList<Person> people = new ArrayList<>(results);
                         terminateRequest = true;
-                        promise.complete(people);
+                        promise.complete(new ArrayList<>(results));
                         break;
                     }
                     results.add(record.value());
@@ -84,12 +84,6 @@ public class KafkaConsumerMain {
     }
 
     private static KafkaConsumer<String, Person> getKafkaConsumer() {
-        log.info("I am a Kafka Consumer");
-
-        String bootstrapServers = "localhost:9092";
-        String groupId = "consumer-4";
-
-        // create consumer configs
         Properties properties = new Properties();
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
@@ -98,7 +92,6 @@ public class KafkaConsumerMain {
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, String.valueOf(false));
 
-        // create consumer
         KafkaConsumer<String, Person> consumer = new KafkaConsumer<>(properties);
 
         // get a reference to the current thread
