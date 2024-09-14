@@ -27,7 +27,7 @@ public class KafkaConsumerMain {
     private static final String bootstrapServers = "localhost:9092";
     private static final String groupId = "consumer-4";
     private static KafkaConsumer<String, Person> consumer;
-    private static final long timeout = 3000;
+    private static final long timeout = 2000;
 
     public KafkaConsumerMain() {
         consumer = getKafkaConsumer();
